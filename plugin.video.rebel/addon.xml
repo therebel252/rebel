@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rebel" name="Rebel Sports" version="1.0" provider-name="Rebel">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.addon.common" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="init.py">
+        <provides>video executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">RebelTV</summary>
+    <website>http://rebelsports.me/</website>
+    <description lang="en">IPTV Addon </description>
+    <disclaimer lang="en">Sports and Entertainment Addon For Kodi</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>
