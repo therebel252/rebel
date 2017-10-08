@@ -12,8 +12,8 @@ noposter = "bm9wb3N0ZXIuanBn"
 theater = "dGhlYXRlci5qcGc="
 addonxml = "YWRkb24ueG1s"
 addonpy = "ZGVmYXVsdC5weQ=="
-icon = "aWNvbi5qcGc="
-fanart = "ZmFuYXJ0LnBuZw=="
+icon = "aWNvbi5wbmc="
+fanart = "ZmFuYXJ0LmpwZw=="
 message = "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"
 def run():
     global pnimi
