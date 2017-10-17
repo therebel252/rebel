@@ -1,304 +1,379 @@
-import urllib,urllib2,sys,re,xbmcplugin,xbmcgui,xbmcaddon,datetime,os,json,base64,plugintools
-import xml.etree.ElementTree as ElementTree
-reload(sys)
-sys.setdefaultencoding('utf8')
-SKIN_VIEW_FOR_MOVIES="515"
-addonDir = plugintools.get_runtime_path()
-global kontroll
-background = "YmFja2dyb3VuZC5wbmc="
-defaultlogo = "ZGVmYXVsdGxvZ28ucG5n"
-hometheater = "aG9tZXRoZWF0ZXIuanBn"
-noposter = "bm9wb3N0ZXIuanBn"
-theater = "dGhlYXRlci5qcGc="
-addonxml = "YWRkb24ueG1s"
-addonpy = "ZGVmYXVsdC5weQ=="
-icon = "aWNvbi5wbmc="
-fanart = "ZmFuYXJ0LmpwZw=="
-message = "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"
-def run():
-    global pnimi
-    global televisioonilink
-    global filmilink
-    global andmelink
-    global uuenduslink
-    global lehekylg
-    global LOAD_LIVE
-    global uuendused
-    global vanemalukk
-    global version
-    version = int(get_live("MQ=="))
-    kasutajanimi=plugintools.get_setting(get_live("a2FzdXRhamFuaW1p"))
-    salasona=plugintools.get_setting(vod_channels("c2FsYXNvbmE="))
-    lehekylg='http://rebelsports.club'
-    pordinumber='25461'
-    uuendused=plugintools.get_setting(sync_data("dXVlbmR1c2Vk"))
-    vanemalukk=plugintools.get_setting(sync_data("dmFuZW1hbHVraw=="))
-    pnimi = get_live("UmViZWxUVg==")
-    LOAD_LIVE = os.path.join( plugintools.get_runtime_path() , get_live("cmVzb3VyY2Vz") , vod_channels("YXJ0") )
-    plugintools.log(pnimi+get_live("U3RhcnRpbmcgdXA="))
-    televisioonilink = get_live("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9jYXRlZ29yaWVz")%(lehekylg,pordinumber,kasutajanimi,salasona)
-    filmilink = vod_channels("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=")%(lehekylg,pordinumber,kasutajanimi,salasona)
-    andmelink = vod_channels("JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona)
-    uuenduslink = get_live("aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy83ZW0yNHdkMXBkZGlkcW8vdmVyc2lvbi50eHQ/ZGw9MQ==")
-
-    params = plugintools.get_params()
-
-    if params.get("action") is None:
-        peamenyy(params)
-    else:
-        action = params.get("action")
-        exec action+"(params)"
-
-    plugintools.close_item_list()
-def peamenyy(params):
-    plugintools.log(pnimi+vod_channels("TWFpbiBNZW51")+repr(params))
-    load_channels()
-    if not lehekylg:
-       plugintools.open_settings_dialog()
-    if uuendused == "true":
-       kontrolli_uuendusi()
-    channels = kontroll()
-    plugintools.log(pnimi+str(channels))
-    if channels == 1:
-       plugintools.log(pnimi+vod_channels("TG9naW4gU3VjY2Vzcw=="))
-       plugintools.add_item( action=vod_channels("ZXhlY3V0ZV9haW5mbw=="),   title=vod_channels("TXkgQWNjb3VudA==") , thumbnail="" , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.add_item( action=vod_channels("c2VjdXJpdHlfY2hlY2s="),  title=vod_channels("TGl2ZSBUVg==") , thumbnail="" , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.add_item( action=vod_channels("ZGV0ZWN0X21vZGlmaWNhdGlvbg=="),   title=vod_channels("VmlkZW8gT24gRGVtYW5k") , thumbnail="" , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="), title=vod_channels("U2V0dGluZ3M=") , thumbnail="" , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=") ), folder=False )
-       plugintools.set_view( plugintools.LIST )
-    else:
-       plugintools.log(pnimi+vod_channels("TG9naW4gZmFpbGVk"))
-       plugintools.message(vod_channels("TG9naW4gZmFpbGVk"), vod_channels("UG9zc2libGUgcmVhc29uczogV3JvbmcgaG9zdCxwb3J0LHVzZXJuYW1lIG9yIHBhc3MuICAgICAgICAgIFBsZWFzZSByZWNvbmZpZ3VyZSAlcyBwbHVnaW4gd2l0aCBjb3JyZWN0IGRldGFpbHMh")%(pnimi))
-       exit()
-    if plugintools.get_setting("improve")=="true":
-        tseaded = xbmc.translatePath(sync_data("c3BlY2lhbDovL3VzZXJkYXRhL2FkdmFuY2Vkc2V0dGluZ3MueG1s"))
-        if not os.path.exists(tseaded):
-            file = open( os.path.join(plugintools.get_runtime_path(),vod_channels("cmVzb3VyY2Vz"),sync_data("YWR2YW5jZWRzZXR0aW5ncy54bWw=")) )
-            data = file.read()
-            file.close()
-            file = open(tseaded,"w")
-            file.write(data)
-            file.close()
-            plugintools.message(pnimi, get_live("TmV3IGFkdmFuY2VkIHN0cmVhbWluZyBzZXR0aW5ncyBhZGRlZC4="))
-def license_check(params):
-    plugintools.log(pnimi+get_live("U2V0dGluZ3MgbWVudQ==")+repr(params))
-    plugintools.open_settings_dialog()
-def security_check(params):
-    plugintools.log(pnimi+sync_data("TGl2ZSBNZW51")+repr(params))
-    request = urllib2.Request(televisioonilink, headers={"Accept" : "application/xml"})
-    u = urllib2.urlopen(request)
-    tree = ElementTree.parse(u)
-    rootElem = tree.getroot()
-    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-        kanalinimi = channel.find(get_live("dGl0bGU=")).text
-        kanalinimi = base64.b64decode(kanalinimi)
-        kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
-        plugintools.add_item( action=get_live("c3RyZWFtX3ZpZGVv"), title=kanalinimi , url=kategoorialink , thumbnail=os.path.join(LOAD_LIVE,sync_data("bG9nby5wbmc=")) , fanart="" , folder=True )
-    plugintools.set_view( plugintools.LIST )
-def detect_modification(params):
-    plugintools.log(pnimi+vod_channels("Vk9EIE1lbnUg")+repr(params))        
-    request = urllib2.Request(filmilink, headers={"Accept" : "application/xml"})
-    u = urllib2.urlopen(request)
-    tree = ElementTree.parse(u)
-    rootElem = tree.getroot()
-    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-        filminimi = channel.find(get_live("dGl0bGU=")).text
-        filminimi = base64.b64decode(filminimi)
-        kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
-        plugintools.add_item( action=vod_channels("Z2V0X215YWNjb3VudA=="), title=filminimi , url=kategoorialink , thumbnail = "" , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=True )
-    plugintools.set_view( plugintools.LIST )
-def stream_video(params):
-    plugintools.log(pnimi+sync_data("TGl2ZSBDaGFubmVscyBNZW51IA==")+repr(params))
-
-    if vanemalukk == "true":
-       pealkiri = params.get(sync_data("dGl0bGU="))
-       vanema_lukk(pealkiri)
-    url = params.get(get_live("dXJs"))
-    request = urllib2.Request(url, headers={"Accept" : "application/xml"})
-    u = urllib2.urlopen(request)
-    tree = ElementTree.parse(u)
-    rootElem = tree.getroot()
-    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-        kanalinimi = channel.find(get_live("dGl0bGU=")).text
-        kanalinimi = base64.b64decode(kanalinimi)
-        kanalinimi = kanalinimi.partition("[")
-        striimilink = channel.find(get_live("c3RyZWFtX3VybA==")).text
-        pilt = channel.find(vod_channels("ZGVzY19pbWFnZQ==")).text
-        kava = kanalinimi[1]+kanalinimi[2]
-        kava = kava.partition("]")
-        kava = kava[2]
-        kava = kava.partition("   ")
-        kava = kava[2]
-        shou = get_live("W0NPTE9SIHdoaXRlXSVzIFsvQ09MT1Jd")%(kanalinimi[0])+kava
-        kirjeldus = channel.find(sync_data("ZGVzY3JpcHRpb24=")).text
-        if kirjeldus:
-           kirjeldus = base64.b64decode(kirjeldus)
-           nyyd = kirjeldus.partition("(")
-           nyyd = sync_data("Tk9XOiA=") +nyyd[0]
-           jargmine = kirjeldus.partition(")\n")
-           jargmine = jargmine[2].partition("(")
-           jargmine = sync_data("TkVYVDog") +jargmine[0]
-           kokku = nyyd+jargmine
-        else:
-           kokku = ""
-        if pilt:
-           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=pilt, plot=kokku, fanart=os.path.join(LOAD_LIVE,vod_channels("aG9tZXRoZWF0ZXIuanBn")), extra="", isPlayable=True, folder=False )
-        else:
-           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,sync_data("ZGVmYXVsdGxvZ28ucG5n")) , plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("aG9tZXRoZWF0ZXIuanBn")) , extra="", isPlayable=True, folder=False )
-    plugintools.set_view( plugintools.EPISODES )
-    xbmc.executebuiltin(vod_channels("Q29udGFpbmVyLlNldFZpZXdNb2RlKDUwMyk="))
-def get_myaccount(params):
-        plugintools.log(pnimi+get_live("Vk9EIGNoYW5uZWxzIG1lbnUg")+repr(params))
-        if vanemalukk == "true":
-           pealkiri = params.get(sync_data("dGl0bGU="))
-           vanema_lukk(pealkiri)
-        purl = params.get(get_live("dXJs"))
-        request = urllib2.Request(purl, headers={"Accept" : "application/xml"})
-        u = urllib2.urlopen(request)
-        tree = ElementTree.parse(u)
-        rootElem = tree.getroot()
-        for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-            pealkiri = channel.find(get_live("dGl0bGU=")).text
-            pealkiri = base64.b64decode(pealkiri)
-            pealkiri = pealkiri.encode("utf-8")
-            striimilink = channel.find(sync_data("c3RyZWFtX3VybA==")).text
-            pilt = channel.find(sync_data("ZGVzY19pbWFnZQ==")).text 
-            kirjeldus = channel.find(vod_channels("ZGVzY3JpcHRpb24=")).text
-            if kirjeldus:
-               kirjeldus = base64.b64decode(kirjeldus) 
-            if pilt:
-               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=pilt, plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,"theater.jpg") , extra="", isPlayable=True, folder=False )
-            else:
-               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,"noposter.jpg"), plot=kirjeldus, fanart="" , extra="", isPlayable=True, folder=False )
-        plugintools.set_view( plugintools.MOVIES )
-        xbmc.executebuiltin('Container.SetViewMode(515)')
-def run_cronjob(params):
-    plugintools.log(pnimi+sync_data("UExBWV9MSVZF")+repr(params))
-    if vanemalukk == "true":
-       pealkiri = params.get(sync_data("dGl0bGU="))
-       vanema_lukk(pealkiri)
-    lopplink = params.get(vod_channels("dXJs"))
-    plugintools.play_resolved_url( lopplink )
-def sync_data(channel):
-    video = base64.b64decode(channel)
-    return video
-def restart_service(params):
-    plugintools.log(pnimi+get_live("UExBWSBWT0Qg")+repr(params))
-    if vanemalukk == "true":
-       pealkiri = params.get(sync_data("dGl0bGU="))
-       vanema_lukk(pealkiri)
-    lopplink = params.get(vod_channels("dXJs"))
-    plugintools.play_resolved_url( lopplink )
-def grab_epg():
-    req = urllib2.Request(andmelink)
-    req.add_header(sync_data("VXNlci1BZ2VudA==") , vod_channels("S29kaSBwbHVnaW4gYnkgTWlra00="))
-    response = urllib2.urlopen(req)
-    link=response.read()
-    jdata = json.loads(link.decode('utf8'))
-    response.close()
-    if jdata:
-       plugintools.log(pnimi+sync_data("amRhdGEgbG9hZGVkIA=="))
-       return jdata
-def kontroll():
-    randomstring = grab_epg()
-    kasutajainfo = randomstring[sync_data("dXNlcl9pbmZv")]
-    kontroll = kasutajainfo[get_live("YXV0aA==")]
-    return kontroll
-def get_live(channel):
-    video = base64.b64decode(channel)
-    return video
-def execute_ainfo(params):
-    plugintools.log(pnimi+get_live("TXkgYWNjb3VudCBNZW51IA==")+repr(params))
-    andmed = grab_epg()
-    kasutajaAndmed = andmed[sync_data("dXNlcl9pbmZv")]
-    seis = kasutajaAndmed[get_live("c3RhdHVz")]
-    aegub = kasutajaAndmed[sync_data("ZXhwX2RhdGU=")]
-    if aegub:
-       aegub = datetime.datetime.fromtimestamp(int(aegub)).strftime('%H:%M %d.%m.%Y')
-    else:
-       aegub = vod_channels("TmV2ZXI=") 
-    rabbits = kasutajaAndmed[vod_channels("aXNfdHJpYWw=")]
-    if rabbits == "0":
-       rabbits = sync_data("Tm8=")
-    else:
-       rabbits = sync_data("WWVz")
-    leavemealone = kasutajaAndmed[get_live("bWF4X2Nvbm5lY3Rpb25z")]
-    polarbears = kasutajaAndmed[sync_data("dXNlcm5hbWU=")]
-    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdVXNlcjogWy9DT0xPUl0=")+polarbears , thumbnail="" , fanart=os.path.join(LOAD_LIVE,sync_data("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdU3RhdHVzOiBbL0NPTE9SXQ==")+seis , thumbnail="" , fanart=os.path.join(LOAD_LIVE,sync_data("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-    plugintools.add_item( action="",   title=get_live("W0NPTE9SID0gd2hpdGVdRXhwaXJlczogWy9DT0xPUl0=")+aegub , thumbnail="" , fanart=os.path.join(LOAD_LIVE,sync_data("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-    plugintools.add_item( action="",   title=vod_channels("W0NPTE9SID0gd2hpdGVdVHJpYWwgYWNjb3VudDogWy9DT0xPUl0=")+rabbits , thumbnail="" , fanart=os.path.join(LOAD_LIVE,sync_data("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-    plugintools.add_item( action="",   title=vod_channels("W0NPTE9SID0gd2hpdGVdTWF4IGNvbm5lY3Rpb25zOiBbL0NPTE9SXQ==")+leavemealone , thumbnail="" , fanart=os.path.join(LOAD_LIVE,sync_data("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-    plugintools.set_view( plugintools.LIST )
-def vanema_lukk(name):
-        plugintools.log(pnimi+sync_data("UGFyZW50YWwgbG9jayA="))
-        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx'
-        if any(s in name for s in a):
-           xbmc.executebuiltin((u'XBMC.Notification("Parental Lock", "Channels may contain adult content", 2000)'))
-           text = plugintools.keyboard_input(default_text="", title=get_live("UGFyZW50YWwgbG9jaw=="))
-           if text==plugintools.get_setting(sync_data("dmFuZW1ha29vZA==")):
-              return
-           else:
-              exit()
-        else:
-           name = ""
-def kontrolli_uuendusi():
-        req = urllib2.Request(uuenduslink)
-        req.add_header(vod_channels("VXNlci1BZ2VudA==") , sync_data("S29kaSBwbHVnaW4gYnkgTWlra00="))
-        response = urllib2.urlopen(req)
-        repoversion=response.read()
-        repoversion = repoversion.partition("\n")
-        iversion = repoversion[1]
-        global dlink
-        dlink = repoversion[2]
-        response.close()
-        if iversion <> version:
-           update = " "
-        else:
-           if plugintools.message_yes_no(pnimi,sync_data("TmV3IHVwZGF0ZSBpcyBhdmFpbGFibGUh"),get_live("RG8geW91IHdhbnQgdG8gdXBkYXRlIHBsdWdpbiBub3c/")):
-              plugintools.log( pnimi+vod_channels("VHJ5aW5nIHRvIHVwZGF0ZSBwbHVnaW4uLi4="))
-              try:
-                  destpathname = xbmc.translatePath(os.path.join(sync_data("c3BlY2lhbDovLw=="),sync_data("aG9tZS9hZGRvbnMv")))
-                  local_file_name = os.path.join( plugintools.get_runtime_path() , get_live("dXBkYXRlLnppcA==") )
-                  plugintools.log(pnimi+local_file_name)
-                  urllib.urlretrieve(dlink, local_file_name )
-                  DownloaderClass(dlink,local_file_name)
-                  plugintools.log(pnimi+sync_data("RXh0cmFjdGluZyB1cGRhdGUuLi4="))
-                  import ziptools
-                  unzipper = ziptools.ziptools()
-                  #destpathname = xbmc.translatePath(os.path.join('special://','home'))
-                  plugintools.log(pnimi+destpathname)
-                  unzipper.extract( local_file_name , destpathname )
-                  os.remove(local_file_name)
-                  xbmc.executebuiltin((u'XBMC.Notification("Updated", "The add-on has been updated", 2000)'))
-                  #import updater
-                  xbmc.executebuiltin( "Container.Refresh" )
-                  plugintools.log(pnimi+get_live("VXBkYXRlIHN1Y2Nlc3M="))
-              except:
-                  plugintools.log(pnimi+get_live("VXBkYXRlIGZhaWxlZA=="))
-                  xbmc.executebuiltin((u'XBMC.Notification("Not updated", "An error causes the update to fail", 2000)'))
-def DownloaderClass(url,dest):
-    dp = xbmcgui.DialogProgress()
-    dp.create(sync_data("R2V0dGluZyB1cGRhdGU="),get_live("RG93bmxvYWRpbmc="))
-    urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
-def check_user():
-    plugintools.message(get_live("RVJST1I="),vod_channels("VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"))
-    sys.exit()
-def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
-    try:
-        percent = min((numblocks*blocksize*100)/filesize, 100)
-        print percent
-        dp.update(percent)
-    except:
-        percent = 100
-        dp.update(percent)
-    if dp.iscanceled(): 
-        print "DOWNLOAD CANCELLED" # need to get this part working
-        dp.close()
-def load_channels():
-    statinfo = os.stat(LOAD_LIVE+"/"+get_live("YmFja2dyb3VuZC5wbmc="))
-
-def vod_channels(channel):
-    video = base64.b64decode(channel)
-    return video
-run()
+import urllib , urllib2 , sys , re , xbmcplugin , xbmcgui , xbmcaddon , datetime , os , json , base64 , plugintools , calendar , time , hashlib
+import xml . etree . ElementTree as ElementTree
+reload ( sys )
+sys . setdefaultencoding ( 'utf8' )
+oo000 = "515"
+ii = plugintools . get_runtime_path ( )
+global oOOo
+O0 = "YmFja2dyb3VuZC5qcGc="
+o0O = "ZGVmYXVsdGxvZ28ucG5n"
+iI11I1II1I1I = "aG9tZXRoZWF0ZXIuanBn"
+oooo = "bm9wb3N0ZXIuanBn"
+iIIii1IIi = "dGhlYXRlci5qcGc="
+o0OO00 = "YWRkb24ueG1s"
+oo = "ZGVmYXVsdC5weQ=="
+i1iII1IiiIiI1 = "aWNvbi5wbmc="
+iIiiiI1IiI1I1 = "ZmFuYXJ0LnBuZw=="
+o0OoOoOO00 = "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"
+# Entry point
+def I11i ( ) :
+ global pnimi
+ global televisioonilink
+ global filmilink
+ global andmelink
+ global uuenduslink
+ global lehekylg
+ global LOAD_LIVE
+ global vanemalukk
+ global version
+ global tvlink
+ global tvkategoorialink
+ global arhiivilink
+ global striimiv2ljund
+ global tvshows
+ version = int ( O0O ( "Mw==" ) )
+ Oo = plugintools . get_setting ( O0O ( "a2FzdXRhamFuaW1p" ) )
+ if not Oo :
+  plugintools . open_settings_dialog ( )
+  Oo = plugintools . get_setting ( O0O ( "a2FzdXRhamFuaW1p" ) )
+ I1ii11iIi11i = plugintools . get_setting ( I1IiI ( "c2FsYXNvbmE=" ) )
+ lehekylg = o0OOO ( "aHR0cDovL3JlYmVsc3BvcnRzLmNsdWI=" )
+ iIiiiI = o0OOO ( "MjU0NjE=" )
+ tvshows = o0OOO ( "YmFja2dyb3VuZC5qcGc=" )
+ vanemalukk = plugintools . get_setting ( o0OOO ( "dmFuZW1hbHVraw==" ) )
+ striimiv2ljund = plugintools . get_setting ( o0OOO ( "c3RyaWltaXYybGp1bmQ=" ) )
+ pnimi = O0O ( "UmViZWwgU3BvcnRz" )
+ LOAD_LIVE = os . path . join ( plugintools . get_runtime_path ( ) , O0O ( "cmVzb3VyY2Vz" ) , I1IiI ( "YXJ0" ) )
+ plugintools . log ( pnimi + O0O ( "U3RhcnRpbmcgdXA=" ) )
+ televisioonilink = O0O ( "JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9jYXRlZ29yaWVz" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ filmilink = I1IiI ( "JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ andmelink = I1IiI ( "JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ uuenduslink = O0O ( "aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy9wb3dieGswZDBieDgxNzkva2luZ1ZlcnNpb24udHh0P2RsPTE=" )
+ tvlink = I1IiI ( "JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ arhiivilink = I1IiI ( "JXM6JXMvc3RyZWFtaW5nL3RpbWVzaGlmdC5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXM=" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ if O0O ( "UmViZWwgU3BvcnRz" ) not in open ( ii + "/" + o0OOO ( "YWRkb24ueG1s" ) ) . read ( ) :
+  Iii1ii1II11i ( )
+  if 10 - 10: I1iII1iiII + I1Ii111 / OOo
+ params = plugintools . get_params ( )
+ if 96 - 96: o0OO0 - Oo0ooO0oo0oO . I1i1iI1i - o00ooo0 / o00 * Oo0oO0ooo
+ if params . get ( "action" ) is None :
+  o0oOoO00o ( params )
+ else :
+  i1 = params . get ( "action" )
+  exec i1 + "(params)"
+  if 64 - 64: ooO0Oooo00 % Ooo0
+ plugintools . close_item_list ( )
+ if 89 - 89: I111i1i1111i - Ii1Ii1iiii11 % I1I1i1
+def o0oOoO00o ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "TWFpbiBNZW51" ) + repr ( params ) )
+ #IiI1i ( )
+ if not lehekylg :
+  plugintools . open_settings_dialog ( )
+ OOo0o0 = oOOo ( )
+ ii11i1i1ii00ooo00o0o0o0o = (time.strftime("%d/%m/%Y"))
+ #gksie0s011saew ( )
+ if OOo0o0 == 1 :
+  plugintools . log ( pnimi + I1IiI ( "TG9naW4gU3VjY2Vzcw==" ) )
+  plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "TXkgQWNjb3VudA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "OoOo" , title = I1IiI ( "TGl2ZSBUVg==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "O0O00o0OOO0" , title = I1IiI ( "VmlkZW8gT24gRGVtYW5k" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "dm9kX2ljb24ucG5n" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  #plugintools . add_item ( action = "oo0OooOOo0" , title = I1IiI ( "VFYgU2hvd3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "oo00O00oO" , title = I1IiI ( "UmViZWwncyBUViBDYXRjaHVw" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YXJjaGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "i1I111I" , title = I1IiI ( "U2V0dGluZ3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c2V0dGluZ3NfaWNvbi5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+  plugintools . set_view ( plugintools . LIST )
+ else :
+  plugintools . log ( pnimi + I1IiI ( "TG9naW4gZmFpbGVk" ) )
+  plugintools . message ( I1IiI ( "TG9naW4gZmFpbGVk" ) , I1IiI ( "UG9zc2libGUgcmVhc29uczogV3JvbmcgaG9zdCxwb3J0LHVzZXJuYW1lIG9yIHBhc3MuICAgICAgICAgIFBsZWFzZSByZWNvbmZpZ3VyZSAlcyBwbHVnaW4gd2l0aCBjb3JyZWN0IGRldGFpbHMh" ) % ( pnimi ) )
+  plugintools . open_settings_dialog ( )
+  #Oo = plugintools . get_setting ( O0O ( "a2FzdXRhamFuaW1p" ) )
+  #I1ii11iIi11i = plugintools . get_setting ( I1IiI ( "c2FsYXNvbmE=" ) )
+  I11i ( )
+ if plugintools . get_setting ( "improve" ) == "true" :
+  O0OoOoo00o = xbmc . translatePath ( o0OOO ( "c3BlY2lhbDovL3VzZXJkYXRhL2FkdmFuY2Vkc2V0dGluZ3MueG1s" ) )
+  if not os . path . exists ( O0OoOoo00o ) :
+   file = open ( os . path . join ( plugintools . get_runtime_path ( ) , I1IiI ( "cmVzb3VyY2Vz" ) , o0OOO ( "YWR2YW5jZWRzZXR0aW5ncy54bWw=" ) ) )
+   iiiI11 = file . read ( )
+   file . close ( )
+   file = open ( O0OoOoo00o , "w" )
+   file . write ( iiiI11 )
+   file . close ( )
+   plugintools . message ( pnimi , O0O ( "TmV3IGFkdmFuY2VkIHN0cmVhbWluZyBzZXR0aW5ncyBhZGRlZC4=" ) )
+   if 91 - 91: oOOOO / i1iiIII111ii + iiIIi1IiIi11 . i1Ii
+   if 25 - 25: OO00O0O0O00Oo + OOoooooO / Oo0ooO0oo0oO . oOOOO % Oo0oO0ooo . Ooo0
+def i1I111I ( params ) :
+ plugintools . log ( pnimi + O0O ( "U2V0dGluZ3MgbWVudQ==" ) + repr ( params ) )
+ plugintools . open_settings_dialog ( )
+ if 1 - 1: i1Ii % Oo0oO0ooo * oOOOO
+def O0O00o0OOO0 ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "Vk9EIE1lbnUg" ) + repr ( params ) )
+ IiIiIi = urllib2 . Request ( filmilink , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  if Ii1iIIIi1ii == "QWxs" :
+     continue
+  Ii1iIIIi1ii = base64 . b64decode ( Ii1iIIIi1ii )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  if "scat_id" in oOo00Oo00O:
+    plugintools.log("IS SUBCAT!")
+    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )	
+  else:  
+    plugintools . add_item ( action = I1IiI ( "T29PbzAwbw==" ) , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+ if 80 - 80: oOOOO * I1iII1iiII / OO00O0O0O00Oo
+def OoOo ( params ) :
+ plugintools . log ( pnimi + o0OOO ( "TGl2ZSBNZW51" ) + repr ( params ) )
+ IiIiIi = urllib2 . Request ( televisioonilink , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii11iii11I = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  Ii11iii11I = base64 . b64decode ( Ii11iii11I )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  plugintools . add_item ( action = O0O ( "STExSUkxaQ==" ) , title = Ii11iii11I , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+ if 43 - 43: o00ooo0 - iiIIi1IiIi11 * OOo
+def I11II1i ( params ) :
+ plugintools . log ( pnimi + o0OOO ( "TGl2ZSBDaGFubmVscyBNZW51IA==" ) + repr ( params ) )
+ if O0O ( "UmViZWwgU3BvcnRz" ) not in open ( ii + "/" + o0OOO ( "YWRkb24ueG1s" ) ) . read ( ) :
+  Iii1ii1II11i ( )
+ if vanemalukk == "true" :
+  IIIII = params . get ( o0OOO ( "dGl0bGU=" ) )
+  ooooooO0oo ( IIIII )
+ IIiiiiiiIi1I1 = params . get ( O0O ( "dXJs" ) )
+ IiIiIi = urllib2 . Request ( IIiiiiiiIi1I1 , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii11iii11I = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  Ii11iii11I = base64 . b64decode ( Ii11iii11I )
+  Ii11iii11I = Ii11iii11I . partition ( "[" )
+  I1IIIii = O0oooo0Oo00 . find ( O0O ( "c3RyZWFtX3VybA==" ) ) . text
+  oOoOooOo0o0 = O0oooo0Oo00 . find ( I1IiI ( "ZGVzY19pbWFnZQ==" ) ) . text
+  OOOO = Ii11iii11I [ 1 ] + Ii11iii11I [ 2 ]
+  OOOO = OOOO . partition ( "]" )
+  OOOO = OOOO [ 2 ]
+  OOOO = OOOO . partition ( "min" )
+  plugintools.log(OOOO[0]+" "+ OOOO[1]+" "+ OOOO[2])
+  OOOO = OOOO [ 2 ]
+  OOO00 = O0O ( "W0NPTE9SIGdyZXldJXMgWy9DT0xPUl0=" ) % ( Ii11iii11I [ 0 ] ) + OOOO
+  iiiiiIIii = O0oooo0Oo00 . find ( o0OOO ( "ZGVzY3JpcHRpb24=" ) ) . text
+  if iiiiiIIii :
+   iiiiiIIii = base64 . b64decode ( iiiiiIIii )
+   O000OO0 = iiiiiIIii . partition ( "(" )
+   O000OO0 = o0OOO ( "Tk9XOiA=" ) + O000OO0 [ 0 ]
+   I11iii1Ii = iiiiiIIii . partition ( ")\n" )
+   I11iii1Ii = I11iii1Ii [ 2 ] . partition ( "(" )
+   I11iii1Ii = o0OOO ( "TkVYVDog" ) + I11iii1Ii [ 0 ]
+   I1IIiiIiii = O000OO0 + I11iii1Ii
+  else :
+   I1IIiiIiii = ""
+  if striimiv2ljund == "true":
+   I1IIIii = I1IIIii .replace(".ts",".m3u8")
+  if oOoOooOo0o0 :
+   oOoOooOo0o0 = oOoOooOo0o0.strip()
+   plugintools . add_item ( action = o0OOO ( "T09PME9Pbw==" ) , title = OOO00 , url = I1IIIii , thumbnail = oOoOooOo0o0 , plot = I1IIiiIiii , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "aG9tZXRoZWF0ZXIuanBn" ) ) , extra = "" , isPlayable = True , folder = False )
+  else :
+   plugintools . add_item ( action = o0OOO ( "T09PME9Pbw==" ) , title = OOO00 , url = I1IIIii , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "ZGVmYXVsdGxvZ28ucG5n" ) ) , plot = I1IIiiIiii , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "aG9tZXRoZWF0ZXIuanBn" ) ) , extra = "" , isPlayable = True , folder = False )
+ #plugintools . set_view ( plugintools . EPISODES )
+ xbmc . executebuiltin ( I1IiI ( "Q29udGFpbmVyLlNldFZpZXdNb2RlKDU1KQ==" ) )
+ if 97 - 97: OOoooooO - I1I1i1 * I1iII1iiII / ooO0Oooo00 % OO00O0O0O00Oo - o0OO0
+def OoOo00o ( params ) :
+ plugintools . log ( pnimi + O0O ( "Vk9EIGNoYW5uZWxzIG1lbnUg" ) + repr ( params ) )
+ if vanemalukk == "true" :
+  IIIII = params . get ( o0OOO ( "dGl0bGU=" ) )
+  ooooooO0oo ( IIIII )
+ o0OOoo0OO0OOO = params . get ( O0O ( "dXJs" ) )
+ IiIiIi = urllib2 . Request ( o0OOoo0OO0OOO , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  IIIII = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  IIIII = base64 . b64decode ( IIIII )
+  IIIII = IIIII . encode ( "utf-8" )
+  I1IIIii = O0oooo0Oo00 . find ( o0OOO ( "c3RyZWFtX3VybA==" ) ) . text
+  oOoOooOo0o0 = O0oooo0Oo00 . find ( o0OOO ( "ZGVzY19pbWFnZQ==" ) ) . text
+  iiiiiIIii = O0oooo0Oo00 . find ( I1IiI ( "ZGVzY3JpcHRpb24=" ) ) . text
+  if iiiiiIIii :
+   iiiiiIIii = base64 . b64decode ( iiiiiIIii )
+  if iiiiiIIii is None :
+    iiiiiIIii = ""
+  if oOoOooOo0o0 is not None :
+   plugintools . add_item ( action = "II11i1iIiII1" , title = IIIII , url = I1IIIii , thumbnail = oOoOooOo0o0 , plot = iiiiiIIii , fanart = os . path . join ( LOAD_LIVE , "theater.jpg" ) , extra = "" , isPlayable = True , folder = False )
+  else :
+   plugintools . add_item ( action = "II11i1iIiII1" , title = IIIII , url = I1IIIii , thumbnail = os . path . join ( LOAD_LIVE , "noposter.jpg" ) , plot = iiiiiIIii , fanart = "" , extra = "" , isPlayable = True , folder = False )
+ plugintools . set_view ( plugintools . MOVIES )
+ xbmc . executebuiltin ( 'Container.SetViewMode(515)' )
+ if 19 - 19: Ii1Ii1iiii11 % Oo0ooO0oo0oO % Ooo0
+def oo0OooOOo0 ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "VFYgU2hvd3M=" ) + repr ( params ) )
+ o0OOoo0OO0OOO = params . get ( O0O ( "dXJs" ) )
+ ##TODO ADD
+ IiIiIi = urllib2 . Request ( o0OOoo0OO0OOO , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ o0OO00oO = 0
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  if Ii1iIIIi1ii == "YmFja2dyb3VuZC5qcGc=" :
+   o0OO00oO = 1
+   global tvkategoorialink
+   tvkategoorialink = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+   I11i1I1I ( params )
+   if 83 - 83: I111i1i1111i / OOoooooO
+ if o0OO00oO == 0 :
+  plugintools . message ( pnimi , "There are no TV series available" )
+  if 49 - 49: Ooo0
+def I11i1I1I ( params ) :
+ plugintools . log ( pnimi + "Get tv show cats" + repr ( params ) )
+ tvkategoorialink = params . get ( O0O ( "dXJs" ) )
+ IiIiIi = urllib2 . Request ( tvkategoorialink , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  Ii1iIIIi1ii = base64 . b64decode ( Ii1iIIIi1ii )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  plugintools . add_item ( action = I1IiI ( "T29PbzAwbw==" ) , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "c2VyaWVzLmpwZw==" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+def gksie0s011saew ( ) :
+ IIii1Ii1 = hashlib . md5 ( open ( ii + "/" + o0OOO ( "YWRkb24ueG1s" ) , 'rb' ) . read ( ) ) . hexdigest ( )
+ I1II11IiII = I1IiI ( "NTJiNjdhYmE5MWM0ZTJhZjhhYmJjZmNlNTg2NmIzZTI=" )
+ # if ( IIii1Ii1 != I1II11IiII ) :
+ #  exit ( )
+def OOO0OOo ( params ) :
+ plugintools . log ( pnimi + o0OOO ( "UExBWV9MSVZF" ) + repr ( params ) )
+ if vanemalukk == "true" :
+  IIIII = params . get ( o0OOO ( "dGl0bGU=" ) )
+  ooooooO0oo ( IIIII )
+ I1I111 = params . get ( I1IiI ( "dXJs" ) )
+ #I1I111 = "http://iptv.leeztv.com/relocate.php?loc=" + I1I111
+ plugintools.log(I1I111)
+ plugintools . play_resolved_url ( I1I111 )
+def o0OOO ( channel ) :
+ i11iiI111I = base64 . b64decode ( channel )
+ return i11iiI111I
+def II11i1iIiII1 ( params ) :
+ plugintools . log ( pnimi + O0O ( "UExBWSBWT0Qg" ) + repr ( params ) )
+ if vanemalukk == "true" :
+  IIIII = params . get ( o0OOO ( "dGl0bGU=" ) )
+  ooooooO0oo ( IIIII )
+ I1I111 = params . get ( I1IiI ( "dXJs" ) )
+ plugintools . play_resolved_url ( I1I111 )
+def exit ( ) :
+ plugintools . log ( I1IiI ( "WW91ciBrb2RpIHZlcnNpb24gaXMgb3V0ZGF0ZWQh" ) )
+ sys . exit ( )
+def iIi1iIiii111 ( ) :
+ iIIIi1 = urllib2 . Request ( andmelink )
+ iIIIi1 . add_header ( o0OOO ( "VXNlci1BZ2VudA==" ) , I1IiI ( "S29kaSBwbHVnaW4gYnkgTWlra00=" ) )
+ iiII1i1 = urllib2 . urlopen ( iIIIi1 )
+ o00oOO0o = iiII1i1 . read ( )
+ OOO00O = json . loads ( o00oOO0o . decode ( 'utf8' ) )
+ iiII1i1 . close ( )
+ if OOO00O :
+  plugintools . log ( pnimi + o0OOO ( "amRhdGEgbG9hZGVkIA==" ) )
+  return OOO00O
+def oOOo ( ) :
+ OOoOO0oo0ooO = iIi1iIiii111 ( )
+ O0o0O00Oo0o0 = OOoOO0oo0ooO [ o0OOO ( "dXNlcl9pbmZv" ) ]
+ oOOo = O0o0O00Oo0o0 [ O0O ( "YXV0aA==" ) ]
+ return oOOo
+def O0O ( channel ) :
+ i11iiI111I = base64 . b64decode ( channel )
+ return i11iiI111I
+ if 87 - 87: OOoooooO * o00 % I1iII1iiII % ooO0Oooo00 - I1I1i1
+def O0ooo0O0oo0 ( params ) :
+ plugintools . log ( pnimi + O0O ( "TXkgYWNjb3VudCBNZW51IA==" ) + repr ( params ) )
+ oo0oOo = iIi1iIiii111 ( )
+ o000O0o = oo0oOo [ o0OOO ( "dXNlcl9pbmZv" ) ]
+ iI1iII1 = o000O0o [ O0O ( "c3RhdHVz" ) ]
+ oO0OOoo0OO = o000O0o [ o0OOO ( "ZXhwX2RhdGU=" ) ]
+ if oO0OOoo0OO :
+  oO0OOoo0OO = datetime . datetime . fromtimestamp ( int ( oO0OOoo0OO ) ) . strftime ( '%H:%M %d.%m.%Y' )
+ else :
+  oO0OOoo0OO = I1IiI ( "TmV2ZXI=" )
+ O0ii1ii1ii = o000O0o [ I1IiI ( "aXNfdHJpYWw=" ) ]
+ if O0ii1ii1ii == "0" :
+  O0ii1ii1ii = o0OOO ( "Tm8=" )
+ else :
+  O0ii1ii1ii = o0OOO ( "WWVz" )
+ oooooOoo0ooo = o000O0o [ O0O ( "bWF4X2Nvbm5lY3Rpb25z" ) ]
+ I1I1IiI1 = o000O0o [ o0OOO ( "dXNlcm5hbWU=" ) ]
+ plugintools . add_item ( action = "" , title = o0OOO ( "W0NPTE9SID0gd2hpdGVdVXNlcjogWy9DT0xPUl0=" ) + I1I1IiI1 , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) )  , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+ plugintools . add_item ( action = "" , title = o0OOO ( "W0NPTE9SID0gd2hpdGVdU3RhdHVzOiBbL0NPTE9SXQ==" ) + iI1iII1 , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) )  , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+ plugintools . add_item ( action = "" , title = O0O ( "W0NPTE9SID0gd2hpdGVdRXhwaXJlczogWy9DT0xPUl0=" ) + oO0OOoo0OO , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) )  , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+ plugintools . add_item ( action = "" , title = I1IiI ( "W0NPTE9SID0gd2hpdGVdVHJpYWwgYWNjb3VudDogWy9DT0xPUl0=" ) + O0ii1ii1ii , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) )  , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+ plugintools . add_item ( action = "" , title = I1IiI ( "W0NPTE9SID0gd2hpdGVdTWF4IGNvbm5lY3Rpb25zOiBbL0NPTE9SXQ==" ) + oooooOoo0ooo , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) )  , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
+ #plugintools . set_view ( plugintools . LIST )
+ xbmc . executebuiltin ( I1IiI ( "Q29udGFpbmVyLlNldFZpZXdNb2RlKDU1KQ==" ) )
+def ooooooO0oo ( name ) :
+ plugintools . log ( pnimi + o0OOO ( "UGFyZW50YWwgbG9jayA=" ) )
+ III1iII1I1ii = 'XXX' , 'Adult' , 'Adults' , 'ADULT' , 'ADULTS' , 'adult' , 'adults' , 'Porn' , 'PORN' , 'porn' , 'Porn' , 'xxx'
+ if any ( s in name for s in III1iII1I1ii ) :
+  xbmc . executebuiltin ( ( u'XBMC.Notification("Parental Lock", "Channels may contain adult content", 2000)' ) )
+  oOOo0 = plugintools . keyboard_input ( default_text = "" , title = O0O ( "UGFyZW50YWwgbG9jaw==" ) )
+  if oOOo0 == plugintools . get_setting ( o0OOO ( "dmFuZW1ha29vZA==" ) ) :
+   return
+  else :
+   exit ( )
+ else :
+  name = ""
+def Iii1ii1II11i ( ) :
+ plugintools . message ( O0O ( "RVJST1I=" ) , I1IiI ( "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h" ) )
+ sys . exit ( )
+def oo00O00oO ( params ) :
+ #tv archive cat
+ iIiIIIi = urllib2 . urlopen ( andmelink )
+ ooo00OOOooO = json . load ( iIiIIIi )
+ O00OOOoOoo0O = ooo00OOOooO [ 'available_channels' ]
+ for O000OOo00oo in O00OOOoOoo0O . values ( ) :
+  oo0OOo = O000OOo00oo [ 'tv_archive' ]
+  if ( oo0OOo == 1 ) :
+   ooOOO00Ooo = O000OOo00oo [ 'name' ]
+   IiIIIi1iIi = O000OOo00oo [ 'stream_id' ]
+   plugintools . add_item ( action = "IIII" , title = ooOOO00Ooo , url = IiIIIi1iIi , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dHZjLmpwZw==" ) ) , isPlayable = False , folder = True )
+def ooOOoooooo ( params ) :
+ plugintools . log ( pnimi + " TESTING" + repr ( params ) )
+ #gksie0s011saew ( )
+ II1I = params . get ( I1IiI ( "dXJs" ) )
+ II1I = II1I . split ( "#" )
+ IiIIIi1iIi = II1I [ 0 ]
+ O0i1II1Iiii1I11 = II1I [ 1 ]
+ I1I111 = arhiivilink + "&stream=" + IiIIIi1iIi + "&duration=120" + "&start=" + O0i1II1Iiii1I11
+ plugintools . log ( "Lopplink " + I1I111 )
+ plugintools . play_resolved_url ( I1I111 )
+def IIII ( params ) :
+ #tv archive list
+ IiIIIi1iIi = params . get ( I1IiI ( "dXJs" ) )
+ IIiiiiiiIi1I1 = andmelink + "&action=get_epg&stream_id=" + IiIIIi1iIi
+ iIiIIIi = urllib2 . urlopen ( IIiiiiiiIi1I1 )
+ iiiI11 = json . load ( iIiIIIi )
+ iiIiI = datetime . datetime . utcnow ( ) - datetime . timedelta ( days = 3 )
+ o00oooO0Oo = calendar . timegm ( iiIiI . timetuple ( ) )
+ o00oooO0Oo = int ( o00oooO0Oo )
+ o0O0OOO0Ooo = time . time ( )
+ o0O0OOO0Ooo = int ( o0O0OOO0Ooo )
+ for iiIiII1 in iiiI11 :
+  OOO00O0O = iiIiII1 [ 'title' ]
+  OOO00O0O = base64 . b64decode ( OOO00O0O )
+  iii = int ( iiIiII1 [ 'start' ] )
+  if ( iii > o00oooO0Oo and iii < o0O0OOO0Ooo ) :
+   if 90 - 90: Ooo0 % Oo0ooO0oo0oO / Oo0oO0ooo
+   IIi = datetime . datetime . fromtimestamp ( int ( iii ) ) . strftime ( '%d.%m %H:%M' )
+   i1Iii1i1I = datetime . datetime . fromtimestamp ( int ( iii ) ) . strftime ( '%Y-%m-%d:%H-%M' )
+   OOO00O0O = IIi + " " + OOO00O0O
+   II1I = IiIIIi1iIi + "#" + i1Iii1i1I
+   plugintools . add_item ( action = "ooOOoooooo" , title = OOO00O0O , url = II1I , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dHZjLmpwZw==" ) ) , isPlayable = True , folder = False )
+#def IiI1i ( ) :
+ #gksie0s011saew ( )
+def I1IiI ( channel ) :
+ i11iiI111I = base64 . b64decode ( channel )
+ return i11iiI111I
+I11i ( ) # dd678faae9ac167bc83abf78e5cb2f3f0688d3a3

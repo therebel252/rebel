@@ -264,5 +264,5 @@ def set_view(view_mode, view_code=0):
 
 f=open(os.path.join(os.path.dirname(__file__),"addon.xml")); data=f.read(); f.close()
 addon_id=find_single_match(data,'id="([^"]+)"')
-if addon_id=="plugin.video.rebel": addon_id=find_single_match(data,"id='([^']+)'")
+if addon_id=="": addon_id=find_single_match(data,"id='([^']+)'")
 __settings__=xbmcaddon.Addon(id=addon_id); __language__=__settings__.getLocalizedString
