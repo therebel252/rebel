@@ -75,10 +75,11 @@ def o0oOoO00o ( params ) :
  if OOo0o0 == 1 :
   plugintools . log ( pnimi + I1IiI ( "TG9naW4gU3VjY2Vzcw==" ) )
   plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "TXkgQWNjb3VudA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
-  plugintools . add_item ( action = "OoOo" , title = I1IiI ( "TGl2ZSBUVg==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
-  plugintools . add_item ( action = "O0O00o0OOO0" , title = I1IiI ( "VmlkZW8gT24gRGVtYW5k" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "dm9kX2ljb24ucG5n" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "OoOo" , title = I1IiI ( "UmViZWwncyBMaXZlIFRW" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "O0O00o0OOO0" , title = I1IiI ( "UmViZWwncyBWaWRlbyBvbiBEZW1hbmQ=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "dm9kX2ljb24ucG5n" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   #plugintools . add_item ( action = "oo0OooOOo0" , title = I1IiI ( "VFYgU2hvd3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
-  plugintools . add_item ( action = "oo00O00oO" , title = I1IiI ( "UmViZWwncyBUViBDYXRjaHVw" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YXJjaGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "oo00O00oO" , title = I1IiI ( "UmViZWwncyBJbnN0YW50IFRWIENhdGNodXA=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YXJjaGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "speedTest" , title = "Speed Test (Check your current Internet Speed)" , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c3BlZWR0ZXN0aWNvbi5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "c3BlZWR0ZXN0LnBuZw==" ) ) , folder = False )
   plugintools . add_item ( action = "i1I111I" , title = I1IiI ( "U2V0dGluZ3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c2V0dGluZ3NfaWNvbi5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
   plugintools . set_view ( plugintools . LIST )
  else :
@@ -289,6 +290,8 @@ def O0O ( channel ) :
  i11iiI111I = base64 . b64decode ( channel )
  return i11iiI111I
  if 87 - 87: OOoooooO * o00 % I1iII1iiII % ooO0Oooo00 - I1I1i1
+def speedTest( params ):
+ import speedtest
 def O0ooo0O0oo0 ( params ) :
  plugintools . log ( pnimi + O0O ( "TXkgYWNjb3VudCBNZW51IA==" ) + repr ( params ) )
  oo0oOo = iIi1iIiii111 ( )
