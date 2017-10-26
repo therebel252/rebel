@@ -74,7 +74,8 @@ def o0oOoO00o ( params ) :
  #gksie0s011saew ( )
  if OOo0o0 == 1 :
   plugintools . log ( pnimi + I1IiI ( "TG9naW4gU3VjY2Vzcw==" ) )
-  plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "TXkgQWNjb3VudA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "V2VsY29tZSBUbyBSZWJlbCBTcG9ydHMgJiBFbnRlcnRhaW5tZW50" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "QWNjb3VudCBEZXRhaWxz" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "OoOo" , title = I1IiI ( "UmViZWwncyBMaXZlIFRW" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "O0O00o0OOO0" , title = I1IiI ( "UmViZWwncyBWaWRlbyBvbiBEZW1hbmQ=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "dm9kX2ljb24ucG5n" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   #plugintools . add_item ( action = "oo0OooOOo0" , title = I1IiI ( "VFYgU2hvd3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
