@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.rebel" name="Rebel Sports" version="1.8" provider-name="Rebel">
+<addon id="plugin.video.rebel" name="Rebel Sports" version="1.9" provider-name="Rebel">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.addon.common" />
@@ -11,7 +11,7 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en"></summary>
 	<website>http://rebelsports.me</website>
-<description lang="en">Please visit http://rebelsports.me/purchase to signup to Rebel Sports
+<description lang="en">Please visit http://rebelsports.me/purchase to signup to Rebel Sports to view our crystal clear HD streams.
         </description>
     <platform>all</platform>
   </extension>

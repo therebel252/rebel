@@ -80,7 +80,7 @@ def o0oOoO00o ( params ) :
   #plugintools . add_item ( action = "oo0OooOOo0" , title = I1IiI ( "VFYgU2hvd3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "oo00O00oO" , title = I1IiI ( "UmViZWwncyBUViBDYXRjaHVw" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YXJjaGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "i1I111I" , title = I1IiI ( "U2V0dGluZ3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c2V0dGluZ3NfaWNvbi5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
-  plugintools . add_item(action= "speedTest", title="Speed Test",folder=False)
+  plugintools . add_item ( action = "speedTest" , title = I1IiI ( "SW50ZXJuZXQgU3BlZWQgVGVzdA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c3BlZWR0ZXN0LnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "c3BlZWRiZy5wbmc=" ) ) , folder = False )
   plugintools . set_view ( plugintools . LIST )
  else :
   plugintools . log ( pnimi + I1IiI ( "TG9naW4gZmFpbGVk" ) )
