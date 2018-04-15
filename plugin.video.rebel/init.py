@@ -27,6 +27,7 @@ def I11i ( ) :
  global vanemalukk
  global version
  global tvlink
+ global tvseries
  global tvkategoorialink
  global arhiivilink
  global striimiv2ljund
@@ -50,6 +51,7 @@ def I11i ( ) :
  andmelink = I1IiI ( "JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
  uuenduslink = O0O ( "aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy9wb3dieGswZDBieDgxNzkva2luZ1ZlcnNpb24udHh0P2RsPTE=" )
  tvlink = I1IiI ( "JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
+ tvseries = I1IiI( "JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfc2VyaWVzX2NhdGVnb3JpZXM=" ) % (lehekylg, iIiiiI, Oo, I1ii11iIi11i )
  arhiivilink = I1IiI ( "JXM6JXMvc3RyZWFtaW5nL3RpbWVzaGlmdC5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXM=" ) % ( lehekylg , iIiiiI , Oo , I1ii11iIi11i )
  if O0O ( "UmViZWwgU3BvcnRz" ) not in open ( ii + "/" + o0OOO ( "YWRkb24ueG1s" ) ) . read ( ) :
   Iii1ii1II11i ( )
@@ -77,7 +79,7 @@ def o0oOoO00o ( params ) :
   plugintools . add_item ( action = "O0ooo0O0oo0" , title = I1IiI ( "TXkgQWNjb3VudA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YWNjb3VudF9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "OoOo" , title = I1IiI ( "TGl2ZSBUVg==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "O0O00o0OOO0" , title = I1IiI ( "VmlkZW8gT24gRGVtYW5k" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "dm9kX2ljb24ucG5n" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
-  #plugintools . add_item ( action = "oo0OooOOo0" , title = I1IiI ( "VFYgU2hvd3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  plugintools . add_item ( action = "O0O00o0OOO02" , title = I1IiI ( "VFYgU2VyaWVz" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "oo00O00oO" , title = I1IiI ( "UmViZWwncyBUViBDYXRjaHVw" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "YXJjaGl2ZV9pY29uLnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
   plugintools . add_item ( action = "i1I111I" , title = I1IiI ( "U2V0dGluZ3M=" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c2V0dGluZ3NfaWNvbi5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = False )
   plugintools . add_item ( action = "speedTest" , title = I1IiI ( "SW50ZXJuZXQgU3BlZWQgVGVzdA==" ) , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "c3BlZWR0ZXN0LnBuZw==" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "c3BlZWRiZy5wbmc=" ) ) , folder = False )
@@ -119,11 +121,75 @@ def O0O00o0OOO0 ( params ) :
   oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
   if "scat_id" in oOo00Oo00O:
     plugintools.log("IS SUBCAT!")
-    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )	
-  else:  
+    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  else:
     plugintools . add_item ( action = I1IiI ( "T29PbzAwbw==" ) , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
  plugintools . set_view ( plugintools . LIST )
  if 80 - 80: oOOOO * I1iII1iiII / OO00O0O0O00Oo
+
+def O0O00o0OOO02 ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "Vk9EIE1lbnUg" ) + repr ( params ) )
+ IiIiIi = urllib2 . Request ( tvseries , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  if Ii1iIIIi1ii == "QWxs" :
+     continue
+  Ii1iIIIi1ii = base64 . b64decode ( Ii1iIIIi1ii )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  if "scat_id" in oOo00Oo00O:
+    plugintools.log("IS SUBCAT!")
+    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  else:
+    plugintools . add_item ( action = "O0O00o0OOO03" , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+ if 80 - 80: oOOOO * I1iII1iiII / OO00O0O0O00Oo
+
+def O0O00o0OOO03 ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "Vk9EIE1lbnUg" ) + repr ( params ) )
+ o0OOoo0OO0OOO = params.get(O0O("dXJs"))
+ IiIiIi = urllib2 . Request ( o0OOoo0OO0OOO , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  if Ii1iIIIi1ii == "QWxs" :
+     continue
+  Ii1iIIIi1ii = base64 . b64decode ( Ii1iIIIi1ii )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  if "scat_id" in oOo00Oo00O:
+    plugintools.log("IS SUBCAT!")
+    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  else:
+    plugintools . add_item ( action = "O0O00o0OOO04" , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+ if 80 - 80: oOOOO * I1iII1iiII / OO00O0O0O00Oo
+
+def O0O00o0OOO04 ( params ) :
+ plugintools . log ( pnimi + I1IiI ( "Vk9EIE1lbnUg" ) + repr ( params ) )
+ o0OOoo0OO0OOO = params.get(O0O("dXJs"))
+ IiIiIi = urllib2 . Request ( o0OOoo0OO0OOO , headers = { "Accept" : "application/xml" } )
+ II = urllib2 . urlopen ( IiIiIi )
+ iI = ElementTree . parse ( II )
+ iI11iiiI1II = iI . getroot ( )
+ for O0oooo0Oo00 in iI . findall ( o0OOO ( "Y2hhbm5lbA==" ) ) :
+  Ii1iIIIi1ii = O0oooo0Oo00 . find ( O0O ( "dGl0bGU=" ) ) . text
+  if Ii1iIIIi1ii == "QWxs" :
+     continue
+  Ii1iIIIi1ii = base64 . b64decode ( Ii1iIIIi1ii )
+  oOo00Oo00O = O0oooo0Oo00 . find ( I1IiI ( "cGxheWxpc3RfdXJs" ) ) . text
+  if "scat_id" in oOo00Oo00O:
+    plugintools.log("IS SUBCAT!")
+    plugintools . add_item ( action = "I11i1I1I" , title = Ii1iIIIi1ii, url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , I1IiI ( "YmFja2dyb3VuZC5qcGc=" ) ) , folder = True )
+  else:
+    #OOO0OOo
+    plugintools . add_item ( action = I1IiI ( "T29PbzAwbw==" ) , title = Ii1iIIIi1ii , url = oOo00Oo00O , thumbnail = os . path . join ( LOAD_LIVE , o0OOO ( "bG9nby5wbmc=" ) ) , fanart = os . path . join ( LOAD_LIVE , o0OOO ( "dGhlYXRlci5qcGc=" ) ) , folder = True )
+ plugintools . set_view ( plugintools . LIST )
+ if 80 - 80: oOOOO * I1iII1iiII / OO00O0O0O00Oo
+
 def OoOo ( params ) :
  plugintools . log ( pnimi + o0OOO ( "TGl2ZSBNZW51" ) + repr ( params ) )
  IiIiIi = urllib2 . Request ( televisioonilink , headers = { "Accept" : "application/xml" } )
